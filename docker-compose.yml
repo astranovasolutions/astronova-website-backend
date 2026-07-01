@@ -33,16 +33,16 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
 
-      DB_URL: jdbc:mysql://mysql:3306/astronova_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-      DB_USERNAME: root
-      DB_PASSWORD: root
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
 
       UPLOAD_DIR: /app/uploads
 
-      MAIL_USERNAME: manishmahale2003@gmail.com
-      MAIL_PASSWORD: Kokani@#2003
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
 
-      ADMIN_EMAIL: manishmahale2003@gmail.com
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
 
 volumes:
   mysql_data:
