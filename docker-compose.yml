@@ -1,0 +1,48 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: astronova-mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: astronova_db
+
+    ports:
+      - "3307:3306"
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: .
+    container_name: astronova-backend
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    ports:
+      - "2026:2026"
+
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+
+      DB_URL: jdbc:mysql://mysql:3306/astronova_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: root
+      DB_PASSWORD: root
+
+      UPLOAD_DIR: /app/uploads
+
+      MAIL_USERNAME: manishmahale2003@gmail.com
+      MAIL_PASSWORD: Kokani@#2003
+
+      ADMIN_EMAIL: manishmahale2003@gmail.com
+
+volumes:
+  mysql_data:
