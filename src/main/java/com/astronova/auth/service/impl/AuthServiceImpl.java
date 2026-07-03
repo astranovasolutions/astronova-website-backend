@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Role role = roleRepository
-                .findByName(RoleType.ROLE_ADMIN)
+                .findByName(RoleType.ROLE_VIEWER)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Role not found"));
 
