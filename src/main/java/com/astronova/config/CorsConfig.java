@@ -1,4 +1,4 @@
-package com.astronova.security;
+package com.astronova.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,15 +10,26 @@ public class CorsConfig {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
+
         return new WebMvcConfigurer() {
+
             @Override
             public void addCorsMappings(CorsRegistry registry) {
+
                 registry.addMapping("/**")
                         .allowedOrigins(
+                                "http://localhost:5173",
                                 "https://astronovasolutions.com",
-                                "http://localhost:5173"
+                                "https://www.astronovasolutions.com"
                         )
-                        .allowedMethods("*")
+                        .allowedMethods(
+                                "GET",
+                                "POST",
+                                "PUT",
+                                "DELETE",
+                                "PATCH",
+                                "OPTIONS"
+                        )
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }

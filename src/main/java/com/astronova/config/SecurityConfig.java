@@ -29,6 +29,7 @@ public class SecurityConfig {
             HttpSecurity http) throws Exception {
 
         http
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
@@ -39,6 +40,8 @@ public class SecurityConfig {
                         ).permitAll()
 
                         .requestMatchers(
+                                "/",
+                                "/health",
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/contact"
