@@ -4,6 +4,7 @@ import com.astronova.auth.dto.AuthResponse;
 import com.astronova.auth.dto.LoginRequest;
 import com.astronova.auth.dto.RegisterRequest;
 import com.astronova.auth.service.AuthService;
+import com.astronova.common.response.ApiResponse;
 import com.astronova.exception.BadRequestException;
 import com.astronova.exception.ResourceNotFoundException;
 import com.astronova.role.entity.Role;
@@ -32,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public AuthResponse register(RegisterRequest request) {
+    public ApiResponse<AuthResponse> register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Email already exists");
@@ -47,29 +48,28 @@ public class AuthServiceImpl implements AuthService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
-                .password(
-                        passwordEncoder.encode(
-                                request.getPassword()
-                        )
-                )
+                .password(passwordEncoder.encode(request.getPassword()))
                 .enabled(true)
                 .role(role)
                 .build();
 
         userRepository.save(user);
 
-        String token =
-                jwtService.generateToken(
-                        user.getEmail()
-                );
+        String token = jwtService.generateToken(user.getEmail());
 
-        return AuthResponse.builder()
-                .token(token)
+        return ApiResponse.<AuthResponse>builder()
+                .success(true)
+                .message("Registration successful")
+                .data(
+                        AuthResponse.builder()
+                                .token(token)
+                                .build()
+                )
                 .build();
     }
 
     @Override
-    public AuthResponse login(LoginRequest request) {
+    public ApiResponse<AuthResponse> login(LoginRequest request) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -81,19 +81,19 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository
                 .findByEmail(request.getEmail())
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found"
-                        ));
+                        new ResourceNotFoundException("User not found"));
 
-        String token =
-                jwtService.generateToken(
-                        user.getEmail()
-                );
+        String token = jwtService.generateToken(user.getEmail());
 
-        return AuthResponse.builder()
-                .token(token)
+        return ApiResponse.<AuthResponse>builder()
+                .success(true)
+                .message("Login successful")
+                .data(
+                        AuthResponse.builder()
+                                .token(token)
+                                .build()
+                )
                 .build();
     }
-
 
 }

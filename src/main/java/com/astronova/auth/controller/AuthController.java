@@ -4,6 +4,7 @@ import com.astronova.auth.dto.AuthResponse;
 import com.astronova.auth.dto.LoginRequest;
 import com.astronova.auth.dto.RegisterRequest;
 import com.astronova.auth.service.AuthService;
+import com.astronova.common.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -21,17 +22,15 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public AuthResponse register(
-            @Valid
-            @RequestBody RegisterRequest request) {
+    public ApiResponse<AuthResponse> register(
+            @Valid @RequestBody RegisterRequest request) {
 
         return authService.register(request);
     }
 
     @PostMapping("/login")
-    public AuthResponse login(
-            @Valid
-            @RequestBody LoginRequest request) {
+    public ApiResponse<AuthResponse> login(
+            @Valid @RequestBody LoginRequest request) {
 
         return authService.login(request);
     }
